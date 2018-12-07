@@ -61,6 +61,10 @@ class DRoot {
                     .reduce(0, (state, next) -> state += next));
         }
     }
+
+    private static int digitalRoot1(int n) {
+        return (n != 0 && n % 9 == 0) ? 9 : n % 9;
+    }
 }
 
 
@@ -167,5 +171,118 @@ class Kata {
         } else {
             return Character.toString(word.charAt(mid));
         }
+    }
+}
+
+class MinNumber {
+    /**
+     * Given a List[] of n integers, find the minimum number to be inserted in a list, so that, sum of all elements of
+     * list should be equal to the closest prime number
+     * <p>
+     * List size is at least 2
+     * List's number will only positives (n > 0)
+     * Repetition of numbers in teh list could occur
+     * The newer list's sum should be equal the closest prime number
+     *
+     * @param numbers
+     * @return
+     */
+    private static int minimumNumber(int[] numbers) {
+        int sum = Arrays.stream(numbers).reduce(0, (state, next) -> state += next);
+        if (isNumberPrime(sum)) return 0;
+        int acc = 0;
+        while (!isNumberPrime(sum)) {
+            sum += acc;
+            acc++;
+        }
+        return acc;
+    }
+
+    /**
+     * Helper function to determine if a number is prime or not
+     *
+     * @param number
+     * @return true if the number is prime
+     */
+    private static boolean isNumberPrime(int number) {
+        //check if n is a multiple of 2
+        if (number % 2 == 0) return false;
+        //if not, then just check the odds
+        for (int i = 3; i * i <= number; i += 2) {
+            if (number % i == 0)
+                return false;
+        }
+        return true;
+    }
+}
+
+class MinSum {
+    /**
+     * Task
+     * <p>
+     * Given an array of integers , Find the minimum sum which is obtained from summing each Two integers product .
+     * <p>
+     * Notes
+     * <p>
+     * Array/list will contain positives only .
+     * Array/list will always has even size
+     * Input >> Output Examples
+     * <p>
+     * 1- minSum({5,4,2,3}) ==> return (22)
+     * Explanation:
+     * <p>
+     * The minimum sum obtained from summing each two integers product , 5*2 + 3*4 = 22
+     *
+     * @param passed
+     * @return
+     */
+    private static int minSum(int[] passed) {
+        int[] sorted = Arrays.stream(passed).sorted().toArray();
+        return IntStream.range(0, sorted.length / 2)
+                .map(i -> sorted[i] * sorted[sorted.length - 1 - i])
+                .sum();
+    }
+}
+
+class CNumericals {
+    /**
+     * You are given an input string.
+     * <p>
+     * For each symbol in the string if it's the first character occurrence, replace it with a '1', else replace it
+     * with the amount of times you've already seen it...
+     * <p>
+     * But will your code be performance enough?
+     * <p>
+     * Examples:
+     * <p>
+     * input   =  "Hello, World!"
+     * result  =  "1112111121311"
+     * <p>
+     * input   =  "aaaaaaaaaaaa"
+     * result  =  "123456789101112"
+     * Note: there will be no int domain overflow (character occurences will be less than 2 billion).
+     *
+     * @param s
+     * @return
+     */
+    private static String numericals(String s) {
+        Map<String, Integer> map = new HashMap<>();
+        String[] stringList = s.split("");
+        StringBuffer res = new StringBuffer();
+        for (String c : stringList) {
+            if (!map.containsKey(c)) {
+                map.put(c, 1);
+            } else {
+                map.put(c, map.get(c) + 1);
+            }
+        }
+
+        for (int i = stringList.length - 1; i >= 0; i--) {
+            String key = stringList[i];
+            res.append(map.get(key).toString());
+            map.put(key, map.get(key) - 1);
+        }
+
+        return res.reverse().toString();
     }
 }
